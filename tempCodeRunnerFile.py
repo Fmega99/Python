@@ -1,1 +1,1 @@
-grayscaled_img = uwu.cvtColor(img, uwu.COLOR_BGR2GRAY)
+print(face_coordinates)
