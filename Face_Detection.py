@@ -1,26 +1,34 @@
-import cv2 as uwu
-
+import cv2
+from random import randrange
 #Acquiring some pre-trained data on face
-trained_face_data = uwu.CascadeClassifier(
+
+trained_face_data = cv2.CascadeClassifier(
     'haarcascade_frontalface_default.xml')
 
 #choosing a random image for this job.
-img = uwu.imread('test.jpg')
 
-#greyscaling the image
+# img = cv2imread('test.jpg')
+webcam = cv2.VideoCapture(0)
+# key = cv2.waitKey(1)
 
-grayscaled_img = uwu.cvtColor(img, uwu.COLOR_BGR2GRAY)
-# uwu.imshow('Grayscaled img', grayscaled_img)
-# uwu.waitKey()
+# #iterate forever over the frames.
+while True:
+    #read the current frame.
+    successful_frame_read, frame = webcam.read()
 
-#detecting faces
-face_coordinates = trained_face_data.detectMultiScale(grayscaled_img)
-for (x, y, w, h) in face_coordinates:
-    uwu.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-print(face_coordinates)
+    #convert the frame to grayscale.
+    grayscaled_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-#showing the image
-uwu.imshow('Output image', img)
-uwu.waitKey()
+    #draw rectangle around the frame
+    face_coordinates = trained_face_data.detectMultiScale(grayscaled_frame)
+    for (x, y, w, h) in face_coordinates:
+        cv2.rectangle(frame, (x, y), (x + w, y + h),
+                      (randrange(255), randrange(255), randrange(255)), 5)
 
-print("Created")
+    cv2.imshow("Converting Frame to grayscale", frame)
+    key = cv2.waitKey(1)
+
+    if key == 83 or key == 115:
+        break
+
+webcam.release()
